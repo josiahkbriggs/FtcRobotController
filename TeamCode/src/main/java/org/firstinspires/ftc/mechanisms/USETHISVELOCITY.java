@@ -35,15 +35,16 @@ public class USETHISVELOCITY extends LinearOpMode {
     double currentSpeed;
     double slowSpeed = 0.2;
     double normalSpeed = 1;
-    double F = 22.6;
-    double P = 34.2;
+    double F = 25.6;
+    double P = 37.2;
 
     private DcMotor LFront;
     private DcMotor LBack;
     private DcMotor RFront;  
     private DcMotor RBack;
     private DcMotor Intake;
-    private DcMotorEx FlyWheel;
+    private DcMotorEx FlyWheelLeft;
+    private DcMotorEx FlyWheelRight;
     //private DcMotor AscensionLeft;
     //private DcMotor AscensionRight;
     private Servo Paddle;
@@ -59,7 +60,8 @@ public class USETHISVELOCITY extends LinearOpMode {
         RFront = hardwareMap.dcMotor.get("RFront");
         RBack = hardwareMap.dcMotor.get("RBack");
         Intake = hardwareMap.dcMotor.get("Intake");
-        FlyWheel = hardwareMap.get(DcMotorEx.class, "FlyWheel");
+        FlyWheelLeft = hardwareMap.get(DcMotorEx.class, "FlyWheelLeft");
+        FlyWheelRight = hardwareMap.get(DcMotorEx.class, "FlyWheelRight");
         //AscensionLeft = hardwareMap.dcMotor.get("AscensionLeft");
         //AscensionRight = hardwareMap.dcMotor.get("AscensionRight");
         Paddle = hardwareMap.servo.get("Paddle");
@@ -72,7 +74,8 @@ public class USETHISVELOCITY extends LinearOpMode {
         RFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FlyWheelLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FlyWheelRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //AscensionLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //AscensionRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -80,15 +83,16 @@ public class USETHISVELOCITY extends LinearOpMode {
         LBack.setDirection(DcMotorSimple.Direction.FORWARD);
         RFront.setDirection(DcMotorSimple.Direction.REVERSE);
         RBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        FlyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        FlyWheelLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        FlyWheelRight.setDirection(DcMotorSimple.Direction.FORWARD);
         Intake.setDirection(DcMotorSimple.Direction.REVERSE);
         
         //FlyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
-        FlyWheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-       // Intake.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-        
+        FlyWheelLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        FlyWheelRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+
         waitForStart();
        
         while (opModeIsActive()) {
@@ -130,15 +134,17 @@ public class USETHISVELOCITY extends LinearOpMode {
             
             //Flywheel Power Up for Positioning
             if (gamepad2.dpad_down) {
-                FlyWheel.setVelocity(350);
+                FlyWheelLeft.setVelocity(700);
+                FlyWheelRight.setVelocity(700);
             } else if (gamepad2.dpad_up) {
-                FlyWheel.setVelocity(1650);
+                FlyWheelLeft.setVelocity(1650);
+                FlyWheelRight.setVelocity(1650);
             } else if (gamepad2.b) {
-                FlyWheel.setVelocity(0);
+                FlyWheelLeft.setVelocity(0);
+                FlyWheelRight.setVelocity(0);
             } else if (gamepad2.left_trigger > 0.1) {
-                FlyWheel.setVelocity(-400);
-            } else if (gamepad2.dpad_left) {
-                //Intake.setVelocity(-1000);
+                FlyWheelLeft.setVelocity(-400);
+                FlyWheelRight.setVelocity(-400);
             } else {
                 //Intake.setVelocity(0);
             }

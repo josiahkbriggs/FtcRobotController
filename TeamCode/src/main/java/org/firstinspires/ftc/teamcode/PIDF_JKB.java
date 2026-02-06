@@ -13,8 +13,8 @@ public class PIDF_JKB extends OpMode {
     
         public DcMotorEx FlyWheel;
 
-        public double highVelocity = 1200;
-        public double lowVelocity = 600;
+        public double highVelocity = 1650;
+        public double lowVelocity = 700;
         
         double curTargetVelocity = highVelocity;
         
@@ -41,7 +41,7 @@ public class PIDF_JKB extends OpMode {
         @Override
         public void loop() {
             //get gamepad commands
-            //set target velo
+            //set target velocity
             //update telemetry
             
             if (gamepad2.xWasPressed()) {
@@ -72,7 +72,7 @@ public class PIDF_JKB extends OpMode {
             PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
             FlyWheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
             
-            //set velo
+            //set velocity
             FlyWheel.setVelocity(curTargetVelocity);
 
             double curVelocity = FlyWheel.getVelocity();

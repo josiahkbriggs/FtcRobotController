@@ -43,7 +43,8 @@ public class AutoBlue extends LinearOpMode {
     private DcMotorEx RFront;  
     private DcMotorEx RBack;
     private DcMotorEx Intake;
-    private DcMotorEx FlyWheel;
+    private DcMotorEx FlyWheelLeft;
+    private DcMotorEx FlyWheelRight;
     private Servo Paddle;
     private IMU imu;
 
@@ -66,7 +67,8 @@ public class AutoBlue extends LinearOpMode {
         RFront = hardwareMap.get(DcMotorEx.class, "RFront");
         RBack = hardwareMap.get(DcMotorEx.class, "RBack");
         Intake = hardwareMap.get(DcMotorEx.class, "Intake");
-        FlyWheel = hardwareMap.get(DcMotorEx.class, "FlyWheel");
+        FlyWheelLeft = hardwareMap.get(DcMotorEx.class, "FlyWheelLeft");
+        FlyWheelRight = hardwareMap.get(DcMotorEx.class, "FlyWheelRight");
         Paddle = hardwareMap.servo.get("Paddle");
         imu = hardwareMap.get(IMU.class, "imu");
        
@@ -80,21 +82,22 @@ public class AutoBlue extends LinearOpMode {
             RFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             LBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             RBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            Intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            
+
             LFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             LBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            FlyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            FlyWheelLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            FlyWheelRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             
             // Sets Direction of the Motors Default State
             LFront.setDirection(DcMotor.Direction.REVERSE);
             RFront.setDirection(DcMotor.Direction.FORWARD);
             LBack.setDirection(DcMotor.Direction.REVERSE);
             RBack.setDirection(DcMotor.Direction.FORWARD);
-            FlyWheel.setDirection(DcMotor.Direction.REVERSE);
+            FlyWheelLeft.setDirection(DcMotor.Direction.FORWARD);
+            FlyWheelRight.setDirection(DcMotor.Direction.REVERSE);
             Intake.setDirection(DcMotor.Direction.REVERSE);
 
             // Forces the Wheels to "Brake" when there is no power being applied
@@ -103,10 +106,12 @@ public class AutoBlue extends LinearOpMode {
             LBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
             RBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
             Intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-            FlyWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            FlyWheelLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            FlyWheelRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
             
             PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
-            FlyWheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+            FlyWheelLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+            FlyWheelRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
             telemetry.addLine("Init Complete");
            
             LFront.setTargetPositionTolerance(18);
@@ -288,29 +293,35 @@ public class AutoBlue extends LinearOpMode {
     }
    
     void FlyWheelPowerUp() {
-        FlyWheel.setVelocity(340);
+        FlyWheelLeft.setVelocity(700);
+        FlyWheelRight.setVelocity(700);
+        
     }
     
     void FlyWheelPowerUp2() {
-        FlyWheel.setVelocity(350);
+        FlyWheelLeft.setVelocity(700);
+        FlyWheelRight.setVelocity(700);
     }
 
     
     void FlyWheelPowerDown() {
-        FlyWheel.setVelocity(0);
+        FlyWheelLeft.setVelocity(0);
+        FlyWheelRight.setVelocity(0);
     }
     
     void FlyWheelReverse() {
-        FlyWheel.setVelocity(-1000);
+        FlyWheelLeft.setVelocity(-1000);
+        FlyWheelRight.setVelocity(-1000);
     }
 
     void IntakeReverse() {
         Intake.setPower(-1);
-        FlyWheel.setVelocity(-1000);
+        FlyWheelLeft.setVelocity(-1000);
+        FlyWheelRight.setVelocity(-1000);
     }
     
     void IntakeStart() {
-        Intake.setPower(0.5);
+        Intake.setPower(0.75);
     }
     
     void IntakeStop() {
@@ -339,18 +350,18 @@ public class AutoBlue extends LinearOpMode {
 
     void Launch3() {
         IntakeStart();
-        sleep(1000);
-        IntakeStop();
-        sleep(100);
+        sleep(2500);
+        //IntakeStop();
         FlyWheelPowerUp2();
-        IntakeStart();
-        sleep(700);
-        IntakeStop();
-        sleep(200);
+        //sleep(100);
+        //IntakeStart();
+        //sleep(700);
+        //IntakeStop();
+        //sleep(200);
         FlyWheelPowerUp2();
-        IntakeStart();
-        sleep(700);
-        IntakeStop();
+        //IntakeStart();
+        //sleep(700);
+        //IntakeStop();
         Paddle();
         IntakeStop();
         FlyWheelPowerDown();
